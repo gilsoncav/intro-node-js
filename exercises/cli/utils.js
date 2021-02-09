@@ -1,8 +1,8 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
 // this path needs to be relative to work with fs
-const contactsLocation = 'contacts.json'
+const contactsLocation = "contacts.json";
 
 /**
  * should read the contacts at the
@@ -10,8 +10,11 @@ const contactsLocation = 'contacts.json'
  * it to a js object
  */
 const getContacts = () => {
-  
-}
+  const rawFile = fs.readFileSync(path.join(__dirname, contactsLocation));
+  const contactsFromFile = JSON.parse(rawFile);
+
+  return contactsFromFile;
+};
 
 /**
  * takes a contacts object, converts it to JSON
@@ -19,12 +22,18 @@ const getContacts = () => {
  * @param {Object} contacts contacts object
  */
 const saveContacts = (contacts) => {
+  try {
+    const contactsToJSON = JSON.stringify(contacts);
+    const filePath = path.join(__dirname, contactsLocation);
 
-}
+    fs.writeFileSync(filePath, contactsToJSON);
+  } catch (e) {
+    console.error(`[ERROR] trying to write in the file ${filePath}`, e);
+  }
+};
 
 module.exports = {
   contactsLocation,
   getContacts,
-  saveContacts
-}
-
+  saveContacts,
+};
